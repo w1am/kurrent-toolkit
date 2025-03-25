@@ -1,0 +1,39 @@
+### Create an connector subscribing to all system records from the beginning of time
+POST http://localhost:2113/connectors/http-sink
+Content-Type: application/json
+
+{
+  "settings": {
+    "instanceTypeName": "http-sink",
+    "url": "http://127.0.0.1:5002",
+    "subscription:filter:scope": "stream",
+    "subscription:filter:filterType": "streamId",
+    "subscription:filter:expression": "example-stream",
+    "_authentication:basic:password": "changeit",
+    "_authentication:bearer:token": "token"
+  }
+}
+
+### Start connector from an existing checkpoint position, defaulting to the subscription initial position if no checkpoint exists
+POST http://localhost:2113/connectors/http-sink/start
+Content-Type: application/json
+
+# Authorization: Basic YWRtaW46Y2hhbmdlaXQ=
+
+
+### Start connector from an existing checkpoint position, defaulting to the subscription initial position if no checkpoint exists
+POST http://localhost:2113/streams/example-stream
+Content-Type: application/json
+ES-EventType: some-event
+ES-EventId: b3f29f96-768f-4d5b-9ad2-86c8a964a562
+
+{
+  "eventId": "b3f29f96-768f-4d5b-9ad2-86c8a964a562",
+  "eventType": "my-event",
+  "data": {
+    "userId": 123,
+    "action": "created",
+    "timestamp": "2025-03-11T12:00:00Z"
+  },
+  "metadata": {}
+}

@@ -1,0 +1,56 @@
+### Create an connector subscribing to all system records from the beginning of time
+POST http://localhost:2113/connectors/elasticsearch-sink
+Content-Type: application/json
+
+{
+  "settings": {
+    "instanceTypeName": "elasticsearch-sink",
+    "indexName": "testing",
+    "batching:batchSize": "1000",
+    "batching:batchTimeoutMs": "250",
+    "subscription:filter:scope": "stream",
+    "subscription:filter:filterType": "streamId",
+    "subscription:filter:expression": "testing"
+  }
+}
+
+### Start connector from an existing checkpoint position, defaulting to the subscription initial position if no checkpoint exists
+POST http://localhost:2113/connectors/elasticsearch-sink/start
+Content-Type: application/json
+
+### Start connector from an existing checkpoint position, defaulting to the subscription initial position if no checkpoint exists
+POST http://localhost:2113/streams/example-stream
+Content-Type: application/json
+ES-EventType: some-event
+ES-EventId: b3f29f96-768f-4d5b-9ad2-86c8a964a562
+
+{
+  "eventId": "b3f29f96-768f-4d5b-9ad2-86c8a964a562",
+  "eventType": "my-event",
+  "data": {
+    "userId": 123,
+    "action": "created",
+    "timestamp": "2025-03-11T12:00:00Z"
+  },
+  "metadata": {}
+}
+
+### Create index
+PUT http://localhost:9200/testing
+Content-Type: application/json
+PUT /_data_stream/my-data-stream
+
+
+### Data stream
+PUT http://localhost:9200/_data_stream/testing
+Content-Type: application/json
+
+### Index documents
+GET http://localhost:9200/testing/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match_all": {}
+  }
+}

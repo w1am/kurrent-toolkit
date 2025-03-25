@@ -1,0 +1,37 @@
+### Create an connector subscribing to all system records from the beginning of time
+POST http://localhost:2113/connectors/kafka-sink
+Content-Type: application/json
+
+{
+  "settings": {
+    "instanceTypeName": "kafka-sink",
+    "bootstrapServers": "localhost:9092",
+    "topic": "testing",
+    "subscription:filter:scope": "stream",
+    "subscription:filter:filterType": "streamId",
+    "subscription:filter:expression": "example-stream"
+  }
+}
+
+### Start connector from an existing checkpoint position, defaulting to the subscription initial position if no checkpoint exists
+POST http://localhost:2113/connectors/kafka-sink/start
+Content-Type: application/json
+
+
+### Start connector from an existing checkpoint position, defaulting to the subscription initial position if no checkpoint exists
+POST http://localhost:2113/streams/example-stream
+Content-Type: application/json
+ES-EventType: some-event
+ES-EventId: b3f29f96-768f-4d5b-9ad2-86c8a964a562
+
+{
+  "eventId": "b3f29f96-768f-4d5b-9ad2-86c8a964a562",
+  "eventType": "my-event",
+  "data": {
+    "userId": 123,
+    "action": "created",
+    "timestamp": "2025-03-11T12:00:00Z"
+  },
+  "metadata": {}
+}
+

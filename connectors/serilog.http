@@ -1,0 +1,92 @@
+### Create Serilog Sink Connector subscribing to all system records from the beginning of time
+POST http://localhost:2113/connectors/logger-sink
+Content-Type: application/json
+
+{
+  "settings": {
+    "instanceTypeName": "SerilogSink",
+    "subscription:filter:scope": "stream",
+    "subscription:filter:filterType": "streamId",
+    "subscription:filter:expression": "example-stream",
+    "subscription:initialPosition": "earliest",
+    "_configuration": "ewogICJTZXJpbG9nIjogewogICAgIlVzaW5nIjogWwogICAgICAiU2VyaWxvZy5TaW5rcy5TZXEiCiAgICBdLAogICAgIkZpbHRlciI6IFsKICAgICAgewogICAgICAgICJOYW1lIjogIkJ5SW5jbHVkaW5nT25seSIsCiAgICAgICAgIkFyZ3MiOiB7CiAgICAgICAgICAiZXhwcmVzc2lvbiI6ICJTb3VyY2VDb250ZXh0IGxpa2UgJ1Nlcmlsb2dTaW5rJyIKICAgICAgICB9CiAgICAgIH0KICAgIF0sCiAgICAiV3JpdGVUbyI6IFsKICAgICAgewogICAgICAgICJOYW1lIjogIlNlcSIsCiAgICAgICAgIkFyZ3MiOiB7CiAgICAgICAgICAic2VydmVyVXJsIjogImh0dHA6Ly9sb2NhbGhvc3Q6NTM0MSIsCiAgICAgICAgICAicGF5bG9hZEZvcm1hdHRlciI6ICJTZXJpbG9nLkZvcm1hdHRpbmcuQ29tcGFjdC5Db21wYWN0SnNvbkZvcm1hdHRlciwgU2VyaWxvZy5Gb3JtYXR0aW5nLkNvbXBhY3QiCiAgICAgICAgfQogICAgICB9CiAgICBdCiAgfQp9",
+    "configuration" : "ewogICJTZXJpbG9nIjogewogICAgIlVzaW5nIjogWyJTZXJpbG9nLlNpbmtzLlNlcSIsICJTZXJpbG9nLlNpbmtzLkNvbnNvbGUiXSwKICAgICJXcml0ZVRvIjogWwogICAgICB7CiAgICAgICAgIk5hbWUiOiAiU2VxIiwKICAgICAgICAiQXJncyI6IHsKICAgICAgICAgICJzZXJ2ZXJVcmwiOiAiaHR0cDovL2xvY2FsaG9zdDo1MzQxIiwKICAgICAgICAgICJwYXlsb2FkRm9ybWF0dGVyIjogIlNlcmlsb2cuRm9ybWF0dGluZy5Db21wYWN0LkNvbXBhY3RKc29uRm9ybWF0dGVyLCBTZXJpbG9nLkZvcm1hdHRpbmcuQ29tcGFjdCIKICAgICAgICB9CiAgICAgIH0sCiAgICAgIHsKICAgICAgICAiTmFtZSI6ICJDb25zb2xlIiwKICAgICAgICAiQXJncyI6IHsKICAgICAgICAgICJGb3JtYXR0ZXIiOiAiU2VyaWxvZy5Gb3JtYXR0aW5nLkNvbXBhY3QuQ29tcGFjdEpzb25Gb3JtYXR0ZXIsIFNlcmlsb2cuRm9ybWF0dGluZy5Db21wYWN0IgogICAgICAgIH0KICAgICAgfQogICAgXQogIH0KfQo="
+  }
+}
+
+### Start Serilog Sink Connector from an existing checkpoint position, defaulting to the subscription initial position if no checkpoint exists
+POST http://localhost:2113/connectors/logger-sink/start
+
+### Stop Serilog Sink Connector
+POST http://localhost:2113/connectors/logger-sink/stop
+
+### Reset Serilog Sink Connector to the beginning
+POST http://localhost:2113/connectors/logger-sink/reset
+
+### Shutdown KurrentDB
+POST http://localhost:2113/admin/shutdown
+
+### Reload KurrentDB Config
+POST http://localhost:2113/admin/reloadconfig
+
+### Resign Node from KurrentDB Cluster
+POST http://localhost:2113/admin/node/resign
+
+### Start Serilog Sink Connector from a specific position
+POST http://localhost:2113/connectors/serilog-sink-3/start/1
+
+### Reset Serilog Sink Connector to the beginning
+POST http://localhost:2113/connectors/logger-sink/reset
+
+### Reset Serilog Sink Connector to a specific position (adjust the position when testing)
+POST http://localhost:2113/connectors/logger-sink/reset/26592
+
+### Reconfigure Logger Sink Connector
+PUT http://localhost:2113/connectors/serilog-sink-3/settings
+Content-Type: application/json
+
+{
+  "instanceTypeName": "KurrentDB.Connectors.Testing.LoggerSink",
+  "subscription:filter:scope": "Record",
+  "subscription:filter:expression": "^\\$.*",
+  "subscription:initialPosition": "Latest",
+  "configuration" : "ewogICJTZXJpbG9nIjogewogICAgIlVzaW5nIjogWwogICAgICAiU2VyaWxvZy5TaW5rcy5TZXEiCiAgICBdLAogICAgIkZpbHRlciI6IFsKICAgICAgewogICAgICAgICJOYW1lIjogIkJ5SW5jbHVkaW5nT25seSIsCiAgICAgICAgIkFyZ3MiOiB7CiAgICAgICAgICAiZXhwcmVzc2lvbiI6ICJTb3VyY2VDb250ZXh0IGxpa2UgJ1Nlcmlsb2dTaW5rJyIKICAgICAgICB9CiAgICAgIH0KICAgIF0sCiAgICAiV3JpdGVUbyI6IFsKICAgICAgewogICAgICAgICJOYW1lIjogIlNlcSIsCiAgICAgICAgIkFyZ3MiOiB7CiAgICAgICAgICAic2VydmVyVXJsIjogImh0dHA6Ly9sb2NhbGhvc3Q6NTM0MSIsCiAgICAgICAgICAicGF5bG9hZEZvcm1hdHRlciI6ICJTZXJpbG9nLkZvcm1hdHRpbmcuQ29tcGFjdC5Db21wYWN0SnNvbkZvcm1hdHRlciwgU2VyaWxvZy5Gb3JtYXR0aW5nLkNvbXBhY3QiCiAgICAgICAgfQogICAgICB9CiAgICBdCiAgfQp9"
+}
+
+### Delete Logger Sink Connector
+DELETE http://localhost:2113/connectors/serilog-sink-3
+
+### List Connectors
+GET http://localhost:2113/connectors
+Content-Type: application/json
+
+{
+  "includeSettings": true
+}
+
+### Get Logger Sink Connector Settings
+GET http://localhost:2113/connectors/serilog-sink-3/settings
+Content-Type: application/json
+
+
+
+# {
+#   "Serilog": {
+#     "Using": ["Serilog.Sinks.Seq", "Serilog.Sinks.Console"],
+#     "WriteTo": [
+#       {
+#         "Name": "Seq",
+#         "Args": {
+#           "serverUrl": "http://localhost:5341",
+#           "payloadFormatter": "Serilog.Formatting.Compact.CompactJsonFormatter, Serilog.Formatting.Compact"
+#         }
+#       },
+#       {
+#         "Name": "Console",
+#         "Args": {
+#           "Formatter": "Serilog.Formatting.Compact.CompactJsonFormatter, Serilog.Formatting.Compact"
+#         }
+#       }
+#     ]
+#   }
+# }
