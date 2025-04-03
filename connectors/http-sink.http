@@ -5,12 +5,12 @@ Content-Type: application/json
 {
   "settings": {
     "instanceTypeName": "http-sink",
-    "url": "http://127.0.0.1:5002",
+    "url": "https://eoddj10t18tzakj.m.pipedream.net",
     "subscription:filter:scope": "stream",
     "subscription:filter:filterType": "streamId",
     "subscription:filter:expression": "example-stream",
-    "_authentication:basic:password": "changeit",
-    "_authentication:bearer:token": "token"
+    "authentication:basic:password": "changeit",
+    "authentication:bearer:token": "token"
   }
 }
 
@@ -19,6 +19,15 @@ POST http://localhost:2113/connectors/http-sink/start
 Content-Type: application/json
 
 # Authorization: Basic YWRtaW46Y2hhbmdlaXQ=
+
+### Stop connector
+POST http://localhost:2113/connectors/http-sink/stop
+
+### Delete connector
+DELETE http://localhost:2113/connectors/http-sink
+
+### Reset connector to the beginning
+POST http://localhost:2113/connectors/http-sink/reset
 
 
 ### Start connector from an existing checkpoint position, defaulting to the subscription initial position if no checkpoint exists
@@ -37,3 +46,16 @@ ES-EventId: b3f29f96-768f-4d5b-9ad2-86c8a964a562
   },
   "metadata": {}
 }
+
+### List Connectors
+GET http://localhost:2113/connectors
+Content-Type: application/json
+
+{
+  "includeSettings": true
+}
+
+
+### Get connector Settings
+GET http://localhost:2113/connectors/http-sink/settings
+Content-Type: application/json
